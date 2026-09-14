@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Prevent browser caching during development -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+    <link rel="stylesheet" href="styles.css?v=1.2" />
+    <title>Pet Care by Group 1</title>
+  </head>
+  <body>
+    <!-- AUTHENTICATION PAGE (Shown by default) -->
+    <div id="auth-screen" class="auth__screen">
+      <div class="auth__card">
+        <div class="auth__header">
+          <h2>Welcome!</h2>
+          <p>Please log in or create an account to access the website.</p>
+        </div>
+
+        <!-- SOCIAL AUTHENTICATION BUTTONS -->
+        <div class="social-auth-container">
+          <button type="button" class="social-btn google-btn" id="google-auth-btn">
+            <svg class="social-icon" viewBox="0 0 24 24" width="18" height="18">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.62z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+            <span>Continue with Google account</span>
+          </button>
+
+          <button type="button" class="social-btn facebook-btn" id="facebook-auth-btn">
+            <svg class="social-icon" viewBox="0 0 24 24" width="18" height="18" fill="#1877F2">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+            <span>Continue with Facebook account</span>
+          </button>
+        </div>
+
+        <div class="auth__divider">
+          <span>OR</span>
+        </div>
+
+        <!-- LOG IN FORM -->
+        <form class="auth__form active" id="login-form">
+          <div class="auth__field">
+            <label for="login-identifier">Gmail/Phone Number</label>
+            <input
+              type="text"
+              id="login-identifier"
+              placeholder="example@gmail.com or 09123456789"
+              required
+            />
+          </div>
+          <div class="auth__field">
+            <label for="login-password">Password</label>
+            <div class="password__input-container">
+              <input
+                type="password"
+                id="login-password"
+                placeholder="Enter password"
+                required
+              />
+              <i class="ri-eye-line toggle-password" data-target="login-password"></i>
+            </div>
+          </div>
+          <button type="submit" class="auth__submit-btn">Log In</button>
+          <p class="auth__switch">
+            Don't have an account? <a href="#" id="switch-to-signup">Create Account</a>
+          </p>
+        </form>
+
+        <!-- SIGN UP FORM -->
+        <form class="auth__form" id="signup-form">
+          <div class="auth__field">
+            <label for="signup-name">Full Name</label>
+            <input
+              type="text"
+              id="signup-name"
+              placeholder="Your Name"
+              required
+            />
+          </div>
+          <div class="auth__field">
+            <label for="signup-identifier">Gmail/Phone Number</label>
+            <input
+              type="text"
+              id="signup-identifier"
+              placeholder="example@gmail.com or 09123456789"
+              required
+            />
+          </div>
+          <div class="auth__field">
+            <label for="signup-password">Password</label>
+            <div class="password__input-container">
+              <input
+                type="password"
+                id="signup-password"
+                placeholder="Create password"
+                required
+              />
+              <i class="ri-eye-line toggle-password" data-target="signup-password"></i>
+            </div>
+          </div>
+          <button type="submit" class="auth__submit-btn">Sign Up</button>
+          <p class="auth__switch">
+            Already have an account? <a href="#" id="switch-to-login">Log In</a>
+          </p>
+        </form>
+      </div>
+    </div>
+
+    <!-- MAIN WEBSITE (Hidden until logged in) -->
+    <div id="main-website" class="hidden">
+      <nav>
+        <div class="nav__header">
+          <div class="nav__logo">
+            <a href="#">PET CARE</a>
+          </div>
+          <div class="nav__menu__btn" id="menu-btn">
+            <i class="ri-menu-line"></i>
+          </div>
+        </div>
+        <ul class="nav__links" id="nav-links">
+          <li class="user__profile-container">
+            <button id="logout-btn" class="nav__logout-btn">Log Out</button>
+            <span id="user-display-name" class="user-name">Julian Roger Nebres</span>
+          </li>
+        </ul>
+      </nav>
+
+      <header id="home">
+        <div class="section__container header__container">
+          <div class="header__content">
+            <h4>Welcome</h4>
+            <h1>Pet<br /><span>Doctor</span></h1>
+            <h2>We love pets like you do :)</h2>
+            <p>
+              From routine check-ups to specialized treatments, we're here to
+              ensure your pets lead happy, healthy lives.
+            </p>
+            <div class="header__btn">
+              <a href="video-player.html" class="header__btn-link">
+                Click To Play Video <i class="ri-arrow-right-line"></i>
+              </a>
+            </div>
+          </div>
+          <div class="header__image">
+            <img
+              src="img/header-bg.png"
+              alt="header-bg"
+              class="header__image-bg"
+            />
+            <img src="img/header.png" alt="header" />
+          </div>
+        </div>
+        <div class="header__bottom"></div>
+      </header>
+
+      <section class="section__container intro__container">
+        <p class="section__subheader">Intro</p>
+        <h2 class="section__header">Get to know us more</h2>
+        <div class="intro__grid">
+          <div class="intro__card">
+            <div class="intro__image">
+              <img src="img/intro-1.png" alt="Pet Experts" />
+            </div>
+            <h4>Pet Experts</h4>
+            <p>
+              Meet our team of skilled veterinarians, dedicated to your pet's
+              well-being.
+            </p>
+            <a href="pet-experts.html">Read More</a>
+          </div>
+          <div class="intro__card">
+            <div class="intro__image">
+              <img src="img/intro-2.png" alt="Vet Services" />
+            </div>
+            <h4>Vet Services</h4>
+            <p>
+              Offering a wide range of veterinary services to keep your pets
+              healthy and happy.
+            </p>
+            <a href="vet-services.html">Read More</a>
+          </div>
+          <div class="intro__card">
+            <div class="intro__image">
+              <img src="img/intro-3.png" alt="Contact Us" />
+            </div>
+            <h4>Contact Us</h4>
+            <p>
+              Reach out to us for any inquiries or schedule an appointment for
+              your pet's care.
+            </p>
+            <a href="contact-us.html">Read More</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section__container about__container" id="about">
+        <p class="section__subheader">About Us</p>
+        <h2 class="section__header">What we can do for you</h2>
+        <div class="about__row">
+          <div class="about__image">
+            <img src="img/about-1.jpg" alt="Pet Health Care" />
+          </div>
+          <div class="about__content">
+            <span><img src="img/about-1-icon.png" alt="about-icon" /></span>
+            <h4>Let us help you with your pet health</h4>
+            <p>
+              Our expert veterinarians are here to provide comprehensive care and
+              guidance to ensure your pet stays in perfect health.
+            </p>
+          </div>
+        </div>
+        <div class="about__row">
+          <div class="about__image">
+            <img src="img/about-2.jpg" alt="Caring Personnel" />
+          </div>
+          <div class="about__content">
+            <span><img src="img/about-2-icon.png" alt="about-icon" /></span>
+            <h4>Caring personal will take care of your pet</h4>
+            <p>
+              Your pet will be in good hands with our compassionate and
+              well-trained staff, who treat every pet like family.
+            </p>
+          </div>
+        </div>
+        <div class="about__row">
+          <div class="about__image">
+            <img src="img/about-3.jpg" alt="Pet Grooming Services" />
+          </div>
+          <div class="about__content">
+            <span><img src="img/about-3-icon.png" alt="about-icon" /></span>
+            <h4>Let us groom your precious and loved pet</h4>
+            <p>
+              From bathing to styling, we offer professional grooming services to
+              keep your pet looking and feeling their best.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section__container" id="store">
+        <p class="section__subheader">Products</p>
+        <h2 class="section__header">Featured pet products</h2>
+
+        <div class="product__grid">
+          <div class="product__card">
+            <img src="img/product-1.jpg" alt="Dog Trash Bag" />
+            <h4>Dog Trash Bag</h4>
+            <p>Convenient and eco-friendly trash bags for easy pet waste disposal.</p>
+            <h5>$29.00 USD</h5>
+          </div>
+
+          <div class="product__card">
+            <img src="img/product-2.jpg" alt="Pet Accessories" />
+            <h4>Pet Accessories</h4>
+            <p>Explore our range of stylish and functional accessories for your furry friends.</p>
+            <h5>$49.00 USD</h5>
+          </div>
+
+          <div class="product__card">
+            <img src="img/product-3.jpg" alt="Dog Food" />
+            <h4>Dog Food</h4>
+            <p>Nutritious and delicious dog food to keep your pet healthy and happy.</p>
+            <h5>$79.00 USD</h5>
+          </div>
+        </div>
+
+        <!-- Order Here Button -->
+        <div class="order__btn-container">
+          <a href="order.html" class="order__btn">
+            Order Here! <i class="ri-shopping-cart-2-line"></i>
+          </a>
+        </div>
+      </section>
+
+      <section class="section__container" id="service">
+        <p class="section__subheader">Services</p>
+        <h2 class="section__header">What We Offer</h2>
+        <div class="service__flex">
+          <div class="service__card">
+            <div>
+              <img src="img/service-1.png" alt="Emergency Care" />
+            </div>
+            <p>Emergency Care</p>
+          </div>
+          <div class="service__card">
+            <div>
+              <img src="img/service-2.png" alt="Vaccination Services" />
+            </div>
+            <p>Vaccination Services</p>
+          </div>
+          <div class="service__card">
+            <div>
+              <img src="img/service-3.png" alt="Nutrition Counseling" />
+            </div>
+            <p>Nutrition Counseling</p>
+          </div>
+          <div class="service__card">
+            <div>
+              <img src="img/service-4.png" alt="Behavioral Consultation" />
+            </div>
+            <p>Behavioral Consultation</p>
+          </div>
+          <div class="service__card">
+            <div>
+              <img src="img/service-5.png" alt="Pet Boarding Services" />
+            </div>
+            <p>Pet Boarding Services</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="client">
+        <div class="section__container client__container">
+          <p class="section__subheader">Feedback</p>
+          <h2 class="section__header">What people say about us</h2>
+          <div class="swiper">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide">
+                <div class="client__card">
+                  <div class="client__details">
+                    <img src="img/client-1.jpg" alt="Sarah Johnson" />
+                    <div>
+                      <h4>Sarah Johnson</h4>
+                      <h5>Graphic Designer</h5>
+                    </div>
+                  </div>
+                  <p>
+                    The care my dog received at Pet Doctor was exceptional. The
+                    vets were attentive cared about my dog's well-being.
+                  </p>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div class="client__card">
+                  <div class="client__details">
+                    <img src="img/client-2.jpg" alt="Michael Adams" />
+                    <div>
+                      <h4>Michael Adams</h4>
+                      <h5>Software Engineer</h5>
+                    </div>
+                  </div>
+                  <p>
+                    Pet Doctor saved my cat during an emergency! Their quick
+                    response and expertise made all the difference.
+                  </p>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div class="client__card">
+                  <div class="client__details">
+                    <img src="img/client-3.jpg" alt="Emily Martinez" />
+                    <div>
+                      <h4>Emily Martinez</h4>
+                      <h5>Teacher</h5>
+                    </div>
+                  </div>
+                  <p>
+                    I trust Pet Doctor with all my pets. Their team is
+                    professional, and they always go the extra mile for their
+                    patients.
+                  </p>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div class="client__card">
+                  <div class="client__details">
+                    <img src="img/client-4.jpg" alt="Jason Lee" />
+                    <div>
+                      <h4>Jason Lee</h4>
+                      <h5>Marketing Specialist</h5>
+                    </div>
+                  </div>
+                  <p>
+                    The grooming services at Pet Doctor are fantastic! My pup
+                    always comes back looking fresh and happy.
+                  </p>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div class="client__card">
+                  <div class="client__details">
+                    <img src="img/client-5.jpg" alt="David Thompson" />
+                    <div>
+                      <h4>David Thompson</h4>
+                      <h5>Accountant</h5>
+                    </div>
+                  </div>
+                  <p>
+                    I've never seen a team so dedicated to animals. Pet Doctor is
+                    my go-to clinic for all pet-related issues.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section__container instagram__container">
+        <p>FOLLOW</p>
+        <h2 class="section__header">Instagram</h2>
+        <div class="instagram__grid">
+          <img src="img/instagram-1.jpg" alt="Instagram Post 1" />
+          <img src="img/instagram-2.jpg" alt="Instagram Post 2" />
+          <img src="img/instagram-3.jpg" alt="Instagram Post 3" />
+          <img src="img/instagram-4.jpg" alt="Instagram Post 4" />
+        </div>
+      </section>
+
+      <footer class="footer" id="contact">
+        <div class="section__container footer__container">
+          <div class="footer__col">
+            <h4>Group Members:</h4>
+            <ul class="footer__members">
+              <li><a href="javascript:void(0)" onclick="showMemberModal('De Los Santos, Faith', 'img/Faith.jpg', 'Group Leader')">De Los Santos, Faith</a></li>
+              <li><a href="javascript:void(0)" onclick="showMemberModal('Nebres, Julian Roger', 'img/Julian Roger.jpg', 'Group Member')">Nebres, Julian Roger</a></li>
+              <li><a href="javascript:void(0)" onclick="showMemberModal('Apolinario, Rennell', 'img/Rennell.jpg', 'Group Member')">Apolinario, Rennell</a></li>
+              <li><a href="javascript:void(0)" onclick="showMemberModal('Tenrio, Marc Leoven', 'img/Leoven.jpg', 'Group Member')">Tenrio, Marc Leoven</a></li>
+              <li><a href="javascript:void(0)" onclick="showMemberModal('Patricio, Genesis', 'img/Genesis.jpg', 'Group Member')">Patricio, Genesis</a></li>
+            </ul>
+          </div>
+
+          <div class="footer__col">
+            <h4>Company</h4>
+            <ul class="footer__links">
+              <li><a href="#pricing">Pricing</a></li>
+              <li><a href="#blog">Blog</a></li>
+            </ul>
+          </div>
+
+          <div class="footer__col">
+            <h4>Address</h4>
+            <p>Union, Libertad, Antique</p>
+            <br />
+            <h4>Inquiries</h4>
+            <p>091234567890</p>
+            <p>support@petdoctorcare.com</p>
+          </div>
+
+          <div class="footer__col">
+            <h4>Newsletter</h4>
+            <p>Stay updated with our latest news</p>
+            <form id="newsletter-form" onsubmit="showNewsletterPopup(event)">
+              <input type="email" id="newsletter-email-input" placeholder="Your email" required />
+              <button type="submit" class="btn">
+                <i class="ri-arrow-right-line"></i>
+              </button>
+            </form>
+
+            <br />
+            <h4>Follow Us</h4>
+            <ul class="footer__socials">
+              <li><a href="https://web.facebook.com/rennell.apolinario8" target="_blank" rel="noopener noreferrer"><i class="ri-facebook-fill"></i></a></li>
+              <li><a href="https://www.instagram.com/its_me_rennell/" target="_blank" rel="noopener noreferrer"><i class="ri-instagram-line"></i></a></li>
+              <li><a href="https://vt.tiktok.com/ZSqaDMAtP/" target="_blank" rel="noopener noreferrer"><i class="ri-tiktok-fill"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer__bar">
+          Ubra it Group 1<br />
+        </div>
+      </footer>
+
+      <!-- FLOATING BOTTOM NAVIGATION BAR -->
+      <nav class="bottom__nav">
+        <a href="#home" class="bottom__nav-link active">
+          <i class="ri-home-4-line"></i>
+          <span>Home</span>
+        </a>
+        <a href="#about" class="bottom__nav-link">
+          <i class="ri-information-line"></i>
+          <span>About</span>
+        </a>
+        <a href="#store" class="bottom__nav-link center-highlight">
+          <div class="center-icon">
+            <i class="ri-shopping-bag-3-line"></i>
+          </div>
+          <span>Store</span>
+        </a>
+        <a href="#service" class="bottom__nav-link">
+          <i class="ri-customer-service-2-line"></i>
+          <span>Services</span>
+        </a>
+        <a href="#contact" class="bottom__nav-link">
+          <i class="ri-contacts-line"></i>
+          <span>Contact</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- SOCIAL NAME PROMPT MODAL -->
+    <div id="social-name-modal" class="auth__modal-overlay">
+      <div class="auth__modal-card logout__card">
+        <button type="button" id="social-modal-close" class="logout__modal-close">&times;</button>
+        <div class="auth__header">
+          <h3 id="social-modal-title">Enter Your Name</h3>
+          <p>Please enter your name to complete social log in.</p>
+        </div>
+        <form id="social-name-form">
+          <div class="auth__field">
+            <label for="social-user-name">Full Name</label>
+            <input
+              type="text"
+              id="social-user-name"
+              placeholder="Enter your name"
+              required
+            />
+          </div>
+          <button type="submit" class="auth__submit-btn" style="margin-top: 1.2rem;">Continue to Website</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- LOG OUT CONFIRMATION MODAL -->
+    <div id="logout-modal" class="auth__modal-overlay">
+      <div class="auth__modal-card logout__card">
+        <button type="button" id="logout-cancel-btn" class="logout__modal-close">&times;</button>
+        <h3>Log Out?</h3>
+        <p>Are you sure you want to log out? Thank you for visiting our site!</p>
+        <button id="logout-confirm-btn" class="auth__submit-btn">Return to Log In</button>
+      </div>
+    </div>
+
+    <!-- INSTAGRAM LIGHTBOX MODAL -->
+    <div id="image-modal" class="image__modal">
+      <div class="image__modal-wrapper">
+        <button id="modal-close" class="image__modal-close" type="button">&times;</button>
+        <img id="modal-img" src="" alt="Zoomed Instagram Image" />
+      </div>
+    </div>
+
+    <!-- NEWSLETTER SUCCESS MODAL -->
+    <div id="newsletter-modal" class="newsletter__modal-overlay">
+      <div class="newsletter__modal-card">
+        <div class="newsletter__modal-icon">
+          <i class="ri-checkbox-circle-fill"></i>
+        </div>
+        <h3>Submitted Successfully!</h3>
+        <p>Thank you for emailing our website!</p>
+        <button type="button" class="newsletter__modal-btn" onclick="closeNewsletterPopup()">Close</button>
+      </div>
+    </div>
+
+    <!-- MEMBER MODAL -->
+    <div id="member-modal" class="member__modal-overlay" onclick="closeMemberModalOnOverlay(event)">
+      <div class="member__modal-card">
+        <button type="button" class="member__modal-close" onclick="closeMemberModal()">&times;</button>
+        <div class="member__modal-img-container">
+          <img id="member-modal-img" src="" alt="Member Photo" />
+        </div>
+        <h3 id="member-modal-name">Member Name</h3>
+        <p id="member-modal-role">Group Member</p>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="main.js?v=1.2"></script>
+  </body>
+</html>
