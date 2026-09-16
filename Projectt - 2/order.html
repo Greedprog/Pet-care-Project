@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Pet Care Store - Search & Shop</title>
+    <style>
+      body {
+        animation: pageEntrance 0.4s ease-out forwards;
+        opacity: 1;
+        transition: opacity 0.25s ease, transform 0.25s ease;
+      }
+      body.page-exit {
+        opacity: 0;
+        transform: translateY(-8px);
+      }
+      @keyframes pageEntrance {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Navigation Bar Setup */
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.2rem 2rem;
+      }
+
+      .nav__header {
+        display: flex;
+        align-items: center;
+      }
+
+      .nav__logo a {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #2c2c2c;
+        text-decoration: none;
+      }
+
+      /* Centered Search Bar Box */
+      .nav__search-center {
+        flex: 0 1 450px;
+        margin: 0 2rem;
+      }
+
+      .nav__search-center input {
+        width: 100%;
+        padding: 0.65rem 1.25rem;
+        border: 1.5px solid #e7e0fd;
+        border-radius: 25px;
+        font-size: 0.9rem;
+        outline: none;
+        background-color: #faf9ff;
+        color: #333;
+        transition: all 0.25s ease;
+      }
+
+      .nav__search-center input:focus {
+        border-color: #7052ff;
+        background-color: #ffffff;
+        box-shadow: 0 0 12px rgba(112, 82, 255, 0.15);
+      }
+
+      .nav__links {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .nav__links a {
+        text-decoration: none;
+        color: #333;
+        font-weight: 600;
+        transition: color 0.2s ease;
+      }
+
+      .nav__links a:hover {
+        color: #7052ff;
+      }
+
+      /* Centered Section Title */
+      .store__header-center {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      /* Search Feedback Banner */
+      .search__status-bar {
+        display: none;
+        margin-bottom: 1.5rem;
+        font-size: 0.95rem;
+        color: #555;
+        background: #f0ecff;
+        padding: 0.6rem 1rem;
+        border-radius: 8px;
+        border-left: 4px solid #7052ff;
+      }
+
+      .search__status-bar strong {
+        color: #7052ff;
+      }
+
+      /* Store Catalog Layout */
+      .store__container {
+        display: grid;
+        grid-template-columns: 1fr 340px;
+        gap: 2rem;
+      }
+
+      @media (max-width: 900px) {
+        .store__container {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .catalog__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .store__card {
+        background: #fff;
+        border: 1px solid #e7e0fd;
+        border-radius: 12px;
+        padding: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .store__card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(112, 82, 255, 0.15);
+      }
+
+      /* Interactive Product Image Zoom Preview */
+      .store__card img {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 0.75rem;
+        cursor: pointer;
+        transition: transform 0.25s ease, filter 0.25s ease;
+      }
+
+      .store__card img:hover {
+        transform: scale(1.03);
+        filter: brightness(0.95);
+      }
+
+      .store__card h3 {
+        font-size: 1.1rem;
+        color: #2c2c2c;
+        margin-bottom: 0.4rem;
+      }
+
+      .store__card p {
+        font-size: 0.85rem;
+        color: #666;
+        margin-bottom: 0.75rem;
+      }
+
+      .store__card .price {
+        font-weight: 700;
+        color: #7052ff;
+        font-size: 1.1rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .add__cart-btn {
+        width: 100%;
+        padding: 0.65rem;
+        background-color: #f0ecff;
+        color: #7052ff;
+        border: 1px solid #7052ff;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .add__cart-btn:hover {
+        background-color: #7052ff;
+        color: #ffffff;
+      }
+
+      /* Cart Sidebar & Quantity Controls */
+      .cart__sidebar {
+        background: #ffffff;
+        border: 1px solid #e7e0fd;
+        border-radius: 12px;
+        padding: 1.5rem;
+        height: fit-content;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+        position: sticky;
+        top: 2rem;
+      }
+
+      .cart__sidebar h3 {
+        font-size: 1.25rem;
+        color: #2c2c2c;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 0.75rem;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .cart__items {
+        max-height: 320px;
+        overflow-y: auto;
+        margin-bottom: 1rem;
+      }
+
+      .cart__item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.85rem 0;
+        border-bottom: 1px dashed #eee;
+        font-size: 0.9rem;
+      }
+
+      .cart__item-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+      }
+
+      .cart__item-title {
+        font-weight: 600;
+        color: #333;
+      }
+
+      .cart__item-price {
+        color: #7052ff;
+        font-size: 0.85rem;
+        font-weight: 600;
+      }
+
+      .cart__item-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+      }
+
+      /* Boxed Quantity Stepper (-) [qty] (+) */
+      .quantity__stepper {
+        display: inline-flex;
+        align-items: center;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        background: #ffffff;
+        overflow: hidden;
+      }
+
+      .stepper__btn {
+        background: #ffffff;
+        border: none;
+        width: 26px;
+        height: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: #555;
+        transition: background 0.2s ease;
+      }
+
+      .stepper__btn:hover {
+        background-color: #f4f0ff;
+        color: #7052ff;
+      }
+
+      .stepper__count {
+        width: 30px;
+        text-align: center;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #2c2c2c;
+        border-left: 1px solid #e0e0e0;
+        border-right: 1px solid #e0e0e0;
+        line-height: 26px;
+      }
+
+      .remove__btn {
+        background: none;
+        border: none;
+        color: #e53e3e;
+        cursor: pointer;
+        font-size: 1.1rem;
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        transition: background 0.2s ease;
+      }
+
+      .remove__btn:hover {
+        background: #ffe5e5;
+      }
+
+      .cart__total {
+        display: flex;
+        justify-content: space-between;
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin: 1rem 0;
+        color: #2c2c2c;
+      }
+
+      .checkout__btn {
+        width: 100%;
+        padding: 0.85rem;
+        background-color: #7052ff;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.25s ease, transform 0.2s ease;
+      }
+
+      .checkout__btn:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+
+      .checkout__btn:not(:disabled):hover {
+        background-color: #593cd8;
+        transform: translateY(-2px);
+      }
+
+      /* Modals */
+      .modal__overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.55);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+        z-index: 1000;
+        padding: 1rem;
+      }
+
+      .modal__overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .modal__card {
+        background: #fff;
+        width: 100%;
+        max-width: 560px;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        transform: translateY(20px);
+        transition: transform 0.3s ease;
+        position: relative;
+      }
+
+      .modal__overlay.active .modal__card {
+        transform: translateY(0);
+      }
+
+      /* Product Image Zoom Modal Card */
+      .image__zoom-card {
+        max-width: 480px;
+        text-align: center;
+        padding: 1.8rem;
+      }
+
+      .image__zoom-card img {
+        width: 100%;
+        max-height: 380px;
+        object-fit: contain;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        border: 1px solid #f0ecff;
+      }
+
+      .modal__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.25rem;
+      }
+
+      .close__modal {
+        background: none;
+        border: none;
+        font-size: 1.6rem;
+        cursor: pointer;
+        color: #888;
+        position: absolute;
+        top: 15px;
+        right: 18px;
+        transition: color 0.2s ease;
+      }
+
+      .close__modal:hover {
+        color: #2c2c2c;
+      }
+
+      .form__group {
+        margin-bottom: 0.85rem;
+      }
+
+      .form__group label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #444;
+        margin-bottom: 0.3rem;
+      }
+
+      /* Input status wrappers & validation icons */
+      .input__status-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      .input__status-wrapper input,
+      .form__group select {
+        width: 100%;
+        padding: 0.75rem 2.5rem 0.75rem 0.85rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        outline: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .form__group select {
+        padding-right: 0.85rem;
+      }
+
+      .input__status-wrapper input:focus,
+      .form__group select:focus {
+        border-color: #7052ff;
+      }
+
+      .status__icon {
+        position: absolute;
+        right: 0.85rem;
+        font-size: 1.2rem;
+        pointer-events: none;
+      }
+
+      .status__icon.valid {
+        color: #2e7d32;
+      }
+
+      .status__icon.invalid {
+        color: #e53e3e;
+      }
+
+      .error__msg {
+        display: none;
+        color: #e53e3e;
+        font-size: 0.78rem;
+        margin-top: 0.25rem;
+        font-weight: 500;
+      }
+
+      .form__row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+      }
+
+      /* Original Clean "Order Successful!" Modal Design */
+      .success__card {
+        max-width: 410px;
+        padding: 2.2rem 2rem;
+        text-align: center;
+        border-radius: 16px;
+      }
+
+      .success__card .success__icon {
+        font-size: 3.2rem;
+        color: #28a745;
+        margin-bottom: 0.6rem;
+        display: inline-block;
+        line-height: 1;
+      }
+
+      .success__card h3 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #111;
+        margin-bottom: 0.5rem;
+      }
+
+      .success__card p {
+        font-size: 0.88rem;
+        color: #4a4a4a;
+        line-height: 1.45;
+        margin-bottom: 1.25rem;
+      }
+
+      .success__card .checkout__btn {
+        width: 100%;
+        padding: 0.75rem;
+        background-color: #7052ff;
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+      }
+
+      .success__card .checkout__btn:hover {
+        background-color: #593cd8;
+      }
+
+      .no-results {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 3rem 1rem;
+        color: #888;
+      }
+
+      .back__btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 2rem;
+        padding: 0.75rem 1.5rem;
+        background-color: #7052ff;
+        color: #ffffff !important;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+  /* Mobile Navigation & Form Responsiveness */
+  @media (max-width: 768px) {
+    nav {
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1rem;
+    }
+
+    .nav__search-center {
+      flex: 1 1 100%;
+      width: 100%;
+      margin: 0;
+    }
+
+    .store__container {
+      grid-template-columns: 1fr;
+    }
+
+    .cart__sidebar {
+      position: static;
+      margin-top: 1.5rem;
+    }
+
+    .modal__card {
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 1.25rem;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .form__row {
+      grid-template-columns: 1fr;
+    }
+
+    .catalog__grid {
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1rem;
+    }
+
+    .store__card {
+      padding: 0.85rem;
+    }
+
+    .store__card img {
+      height: 120px;
+    }
+
+    .store__card h3 {
+      font-size: 0.95rem;
+    }
+
+    .store__card p {
+      font-size: 0.78rem;
+    }
+  }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <!-- Original PET CARE Logo Position -->
+      <div class="nav__header">
+        <div class="nav__logo">
+          <a href="index.html">PET CARE</a>
+        </div>
+      </div>
+
+      <!-- Clean Centered Search Bar -->
+      <div class="nav__search-center">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search pet products..."
+          oninput="searchProducts()"
+        />
+      </div>
+
+      <!-- Navigation Links -->
+      <ul class="nav__links">
+        <li><a href="index.html">Home</a></li>
+      </ul>
+    </nav>
+
+    <section class="section__container">
+      <!-- Centered Section Header -->
+      <div class="store__header-center">
+        <p class="section__subheader">Official Store</p>
+        <h2 class="section__header">Browse Pet Products</h2>
+      </div>
+
+      <!-- Active Search Status Feedback Banner -->
+      <div class="search__status-bar" id="searchStatusBar">
+        Showing results for: <strong id="searchQueryDisplay">""</strong> (<span id="matchCount">0</span> products found)
+      </div>
+
+      <div class="store__container">
+        <!-- Products Grid Catalog -->
+        <div class="catalog__grid" id="productGrid">
+          <div class="store__card" data-title="dog trash bag waste">
+            <img src="assets/product-1.png" alt="Dog Trash Bag" title="Click to zoom image" />
+            <h3>Dog Trash Bag</h3>
+            <p>Eco-friendly waste disposal rolls (pack of 6).</p>
+            <div class="price">$29.00 USD</div>
+            <button class="add__cart-btn" onclick="addToCart('Dog Trash Bag', 29)">
+              Add to Cart
+            </button>
+          </div>
+
+          <div class="store__card" data-title="pet accessories collar lead strap">
+            <img src="assets/product-2.png" alt="Pet Accessories" title="Click to zoom image" />
+            <h3>Pet Accessories</h3>
+            <p>Premium collar set with adjustable lead strap.</p>
+            <div class="price">$49.00 USD</div>
+            <button class="add__cart-btn" onclick="addToCart('Pet Accessories', 49)">
+              Add to Cart
+            </button>
+          </div>
+
+          <div class="store__card" data-title="dog food kibble organic">
+            <img src="assets/product-3.png" alt="Dog Food" title="Click to zoom image" />
+            <h3>Dog Food</h3>
+            <p>Organic grain-free kibble for adult dogs (5kg).</p>
+            <div class="price">$79.00 USD</div>
+            <button class="add__cart-btn" onclick="addToCart('Dog Food', 79)">
+              Add to Cart
+            </button>
+          </div>
+
+          <div class="store__card" data-title="grooming brush slicker cat dog">
+            <img src="assets/product-2.png" alt="Grooming Brush" title="Click to zoom image" />
+            <h3>Grooming Brush</h3>
+            <p>Gentle de-shedding slicker brush for dogs & cats.</p>
+            <div class="price">$19.00 USD</div>
+            <button class="add__cart-btn" onclick="addToCart('Grooming Brush', 19)">
+              Add to Cart
+            </button>
+          </div>
+
+          <div class="store__card" data-title="pet shampoo organic wash clean lavender">
+            <img src="assets/product-1.png" alt="Pet Shampoo" title="Click to zoom image" />
+            <h3>Pet Shampoo</h3>
+            <p>Hypoallergenic soothing lavender shampoo (500ml).</p>
+            <div class="price">$15.00 USD</div>
+            <button class="add__cart-btn" onclick="addToCart('Pet Shampoo', 15)">
+              Add to Cart
+            </button>
+          </div>
+
+          <div class="store__card" data-title="chew toy rubber durable dog">
+            <img src="assets/product-3.png" alt="Rubber Chew Toy" title="Click to zoom image" />
+            <h3>Rubber Chew Toy</h3>
+            <p>Durable non-toxic rubber chew toy for active dogs.</p>
+            <div class="price">$12.00 USD</div>
+            <button class="add__cart-btn" onclick="addToCart('Rubber Chew Toy', 12)">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+
+        <!-- Cart Sidebar -->
+        <div class="cart__sidebar">
+          <h3><i class="ri-shopping-cart-2-line"></i> Your Order</h3>
+          <div class="cart__items" id="cartItems">
+            <p style="color: #888; font-size: 0.9rem;">Your cart is empty.</p>
+          </div>
+          <div class="cart__total">
+            <span>Total:</span>
+            <span id="cartTotal">$0.00 USD</span>
+          </div>
+          <button class="checkout__btn" id="checkoutBtn" disabled onclick="openCheckoutModal()">
+            Proceed to Checkout
+          </button>
+        </div>
+      </div>
+
+      <a href="index.html" class="back__btn">
+        <i class="ri-arrow-left-line"></i> Back to Home
+      </a>
+    </section>
+
+    <!-- Product Image Zoom Modal -->
+    <div class="modal__overlay" id="imageModal" onclick="closeImageModalOnOverlay(event)">
+      <div class="modal__card image__zoom-card">
+        <button class="close__modal" onclick="closeImageModal()">&times;</button>
+        <h3 id="imageModalTitle" style="font-size: 1.3rem; color: #2c2c2c; margin-bottom: 0.8rem;">Product View</h3>
+        <img id="imageModalImg" src="" alt="Zoomed Product Image" />
+      </div>
+    </div>
+
+    <!-- Delivery Checkout Modal -->
+    <div class="modal__overlay" id="checkoutModal">
+      <div class="modal__card">
+        <div class="modal__header">
+          <h3><i class="ri-map-pin-line"></i> Delivery Address & Payment</h3>
+          <button class="close__modal" onclick="closeCheckoutModal()">&times;</button>
+        </div>
+        <form id="deliveryForm" novalidate>
+          <div class="form__group">
+            <label>Full Name</label>
+            <div class="input__status-wrapper">
+              <input
+                type="text"
+                id="fullNameInput"
+                placeholder="e.g. Juan Dela Cruz"
+                required
+                oninput="validateName()"
+              />
+              <i class="status__icon" id="nameStatusIcon"></i>
+            </div>
+            <span class="error__msg" id="nameError">Please enter a valid full name.</span>
+          </div>
+
+          <div class="form__row">
+            <div class="form__group">
+              <label>Phone Number</label>
+              <div class="input__status-wrapper">
+                <input
+                  type="tel"
+                  id="phoneInput"
+                  placeholder="09123456789"
+                  maxlength="11"
+                  required
+                  oninput="validatePhone()"
+                />
+                <i class="status__icon" id="phoneStatusIcon"></i>
+              </div>
+              <span class="error__msg" id="phoneError">Must start with 09 and be 11 digits.</span>
+            </div>
+
+            <div class="form__group">
+              <label>Region / Province</label>
+              <div class="input__status-wrapper">
+                <input
+                  type="text"
+                  id="regionInput"
+                  placeholder="e.g. Metro Manila"
+                  required
+                  oninput="validateLocationField('regionInput', 'regionStatusIcon', 'regionError')"
+                />
+                <i class="status__icon" id="regionStatusIcon"></i>
+              </div>
+              <span class="error__msg" id="regionError">Invalid or unrecognized region.</span>
+            </div>
+          </div>
+
+          <div class="form__row">
+            <div class="form__group">
+              <label>City / Municipality</label>
+              <div class="input__status-wrapper">
+                <input
+                  type="text"
+                  id="cityInput"
+                  placeholder="e.g. Quezon City"
+                  required
+                  oninput="validateLocationField('cityInput', 'cityStatusIcon', 'cityError')"
+                />
+                <i class="status__icon" id="cityStatusIcon"></i>
+              </div>
+              <span class="error__msg" id="cityError">Invalid or unrecognized city.</span>
+            </div>
+
+            <div class="form__group">
+              <label>Barangay</label>
+              <div class="input__status-wrapper">
+                <input
+                  type="text"
+                  id="barangayInput"
+                  placeholder="e.g. Brgy. Central"
+                  required
+                  oninput="validateLocationField('barangayInput', 'barangayStatusIcon', 'barangayError')"
+                />
+                <i class="status__icon" id="barangayStatusIcon"></i>
+              </div>
+              <span class="error__msg" id="barangayError">Invalid barangay.</span>
+            </div>
+          </div>
+
+          <div class="form__group">
+            <label>Street Name, Building, House No.</label>
+            <div class="input__status-wrapper">
+              <input
+                type="text"
+                id="streetInput"
+                placeholder="Unit / Street / Landmark"
+                required
+                oninput="validateStreetAddress()"
+              />
+              <i class="status__icon" id="streetStatusIcon"></i>
+            </div>
+            <span class="error__msg" id="streetError">Please provide a accurate street address.</span>
+          </div>
+
+          <div class="form__group">
+            <label>Payment Method</label>
+            <select required>
+              <option value="cod">Cash on Delivery (COD)</option>
+              <option value="gcash">GCash / E-Wallet</option>
+              <option value="card">Credit / Debit Card</option>
+            </select>
+          </div>
+
+          <button type="submit" class="checkout__btn" style="margin-top: 1rem;">
+            Place Order Now
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Original Reverted "Order Successful!" Modal -->
+    <div class="modal__overlay" id="successModal">
+      <div class="modal__card success__card">
+        <i class="ri-checkbox-circle-fill success__icon"></i>
+        <h3>Order Successful!</h3>
+        <p>Thank you for shopping with Pet Care! Your order has been placed and is now being prepared for shipping.</p>
+        <button class="checkout__btn" onclick="finishOrder()">Back to Shop</button>
+      </div>
+    </div>
+
+    <script>
+      let cart = [];
+
+      // Add Item or Increase Quantity
+      function addToCart(title, price) {
+        const existingItem = cart.find((item) => item.title === title);
+
+        if (existingItem) {
+          existingItem.quantity += 1;
+        } else {
+          cart.push({ title, price, quantity: 1 });
+        }
+
+        renderCart();
+      }
+
+      // Adjust Item Quantity (+ / -)
+      function updateQuantity(index, change) {
+        cart[index].quantity += change;
+
+        if (cart[index].quantity <= 0) {
+          cart.splice(index, 1);
+        }
+
+        renderCart();
+      }
+
+      // Completely Remove Item from Cart
+      function removeFromCart(index) {
+        cart.splice(index, 1);
+        renderCart();
+      }
+
+      // Render Cart Items with Quantity Controls
+      function renderCart() {
+        const cartContainer = document.getElementById("cartItems");
+        const totalContainer = document.getElementById("cartTotal");
+        const checkoutBtn = document.getElementById("checkoutBtn");
+
+        if (cart.length === 0) {
+          cartContainer.innerHTML = `<p style="color: #888; font-size: 0.9rem;">Your cart is empty.</p>`;
+          totalContainer.innerText = "$0.00 USD";
+          checkoutBtn.disabled = true;
+          return;
+        }
+
+        let total = 0;
+        cartContainer.innerHTML = cart
+          .map((item, index) => {
+            const itemTotal = item.price * item.quantity;
+            total += itemTotal;
+
+            return `
+              <div class="cart__item">
+                <div class="cart__item-info">
+                  <span class="cart__item-title">${item.title}</span>
+                  <span class="cart__item-price">$${itemTotal.toFixed(2)} USD</span>
+                </div>
+                <div class="cart__item-controls">
+                  <div class="quantity__stepper">
+                    <button class="stepper__btn" onclick="updateQuantity(${index}, -1)">-</button>
+                    <span class="stepper__count">${item.quantity}</span>
+                    <button class="stepper__btn" onclick="updateQuantity(${index}, 1)">+</button>
+                  </div>
+                  <button class="remove__btn" onclick="removeFromCart(${index})" title="Remove item">
+                    <i class="ri-delete-bin-line"></i>
+                  </button>
+                </div>
+              </div>
+            `;
+          })
+          .join("");
+
+        totalContainer.innerText = `$${total.toFixed(2)} USD`;
+        checkoutBtn.disabled = false;
+      }
+
+      // Product Image Zoom Functions
+      document.querySelectorAll(".store__card img").forEach((img) => {
+        img.addEventListener("click", () => {
+          const card = img.closest(".store__card");
+          const title = card ? card.querySelector("h3").innerText : "Product View";
+          document.getElementById("imageModalImg").src = img.src;
+          document.getElementById("imageModalTitle").innerText = title;
+          document.getElementById("imageModal").classList.add("active");
+        });
+      });
+
+      function closeImageModal() {
+        document.getElementById("imageModal").classList.remove("active");
+      }
+
+      function closeImageModalOnOverlay(event) {
+        if (event.target.id === "imageModal") {
+          closeImageModal();
+        }
+      }
+
+      // Strict Phone Number Input & Validation
+      function validatePhone() {
+        const phoneInput = document.getElementById("phoneInput");
+        const icon = document.getElementById("phoneStatusIcon");
+        const error = document.getElementById("phoneError");
+
+        // Keep digits only & enforce maximum 11 digits total limit
+        phoneInput.value = phoneInput.value.replace(/\D/g, "").slice(0, 11);
+        const val = phoneInput.value;
+
+        if (val.length === 0) {
+          icon.className = "status__icon";
+          error.style.display = "none";
+          return false;
+        }
+
+        const startsWith09 = val.startsWith("09");
+        const isElevenDigits = val.length === 11;
+
+        if (!startsWith09) {
+          icon.className = "status__icon ri-close-circle-fill invalid";
+          error.innerText = "Phone number must start with 09";
+          error.style.display = "block";
+          return false;
+        } else if (!isElevenDigits) {
+          icon.className = "status__icon ri-close-circle-fill invalid";
+          error.innerText = `Must be exactly 11 digits (${val.length}/11)`;
+          error.style.display = "block";
+          return false;
+        } else {
+          icon.className = "status__icon ri-checkbox-circle-fill valid";
+          error.style.display = "none";
+          return true;
+        }
+      }
+
+      // Name Validation
+      function validateName() {
+        const input = document.getElementById("fullNameInput");
+        const icon = document.getElementById("nameStatusIcon");
+        const error = document.getElementById("nameError");
+        const val = input.value.trim();
+
+        if (val.length === 0) {
+          icon.className = "status__icon";
+          error.style.display = "none";
+          return false;
+        }
+
+        const isValid = /^[a-zA-Z\s\.\,\-]+$/.test(val) && val.length >= 3;
+        if (isValid) {
+          icon.className = "status__icon ri-checkbox-circle-fill valid";
+          error.style.display = "none";
+          return true;
+        } else {
+          icon.className = "status__icon ri-close-circle-fill invalid";
+          error.style.display = "block";
+          return false;
+        }
+      }
+
+      // Real-time Location Accuracy Validation (Region, City, Barangay)
+      function validateLocationField(inputId, iconId, errorId) {
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+        const error = document.getElementById(errorId);
+        const val = input.value.trim();
+
+        if (val.length === 0) {
+          icon.className = "status__icon";
+          error.style.display = "none";
+          return false;
+        }
+
+        const isValidLocation = /^[a-zA-Z0-9\s\.\,\-\#]+$/.test(val) && val.length >= 3;
+
+        if (isValidLocation) {
+          icon.className = "status__icon ri-checkbox-circle-fill valid";
+          error.style.display = "none";
+          return true;
+        } else {
+          icon.className = "status__icon ri-close-circle-fill invalid";
+          error.style.display = "block";
+          return false;
+        }
+      }
+
+      // Street Address Validation
+      function validateStreetAddress() {
+        const input = document.getElementById("streetInput");
+        const icon = document.getElementById("streetStatusIcon");
+        const error = document.getElementById("streetError");
+        const val = input.value.trim();
+
+        if (val.length === 0) {
+          icon.className = "status__icon";
+          error.style.display = "none";
+          return false;
+        }
+
+        const isValid = val.length >= 4 && /^[a-zA-Z0-9\s\.\,\-\#\/]+$/.test(val);
+        if (isValid) {
+          icon.className = "status__icon ri-checkbox-circle-fill valid";
+          error.style.display = "none";
+          return true;
+        } else {
+          icon.className = "status__icon ri-close-circle-fill invalid";
+          error.style.display = "block";
+          return false;
+        }
+      }
+
+      // Form Submit Interceptor
+      document.getElementById("deliveryForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const isNameValid = validateName();
+        const isPhoneValid = validatePhone();
+        const isRegionValid = validateLocationField('regionInput', 'regionStatusIcon', 'regionError');
+        const isCityValid = validateLocationField('cityInput', 'cityStatusIcon', 'cityError');
+        const isBarangayValid = validateLocationField('barangayInput', 'barangayStatusIcon', 'barangayError');
+        const isStreetValid = validateStreetAddress();
+
+        if (!isPhoneValid) {
+          alert("Order blocked: Phone number must start with 09 and be exactly 11 digits long.");
+          document.getElementById("phoneInput").focus();
+          return;
+        }
+
+        if (!isNameValid || !isRegionValid || !isCityValid || !isBarangayValid || !isStreetValid) {
+          alert("Order blocked: Please fix the location error ('X' markers) before completing your order.");
+          return;
+        }
+
+        closeCheckoutModal();
+        document.getElementById("successModal").classList.add("active");
+      });
+
+      // Live Search & Visual Results Feedback
+      function searchProducts() {
+        const query = document.getElementById("searchInput").value.trim().toLowerCase();
+        const cards = document.querySelectorAll("#productGrid .store__card");
+        const statusBar = document.getElementById("searchStatusBar");
+        const queryDisplay = document.getElementById("searchQueryDisplay");
+        const matchCount = document.getElementById("matchCount");
+        let visibleCount = 0;
+
+        cards.forEach((card) => {
+          const searchKeywords = card.getAttribute("data-title").toLowerCase();
+          const title = card.querySelector("h3").innerText.toLowerCase();
+
+          if (query === "" || searchKeywords.includes(query) || title.includes(query)) {
+            card.style.display = "flex";
+            visibleCount++;
+          } else {
+            card.style.display = "none";
+          }
+        });
+
+        if (query !== "") {
+          statusBar.style.display = "block";
+          queryDisplay.innerText = `"${query}"`;
+          matchCount.innerText = visibleCount;
+        } else {
+          statusBar.style.display = "none";
+        }
+
+        let noResultsMsg = document.getElementById("noResults");
+        if (visibleCount === 0) {
+          if (!noResultsMsg) {
+            noResultsMsg = document.createElement("div");
+            noResultsMsg.id = "noResults";
+            noResultsMsg.className = "no-results";
+            noResultsMsg.innerHTML = `<i class="ri-search-2-line" style="font-size: 2.2rem; color: #7052ff; margin-bottom: 0.5rem; display: block;"></i><p>No products found matching "<strong>${query}</strong>"</p>`;
+            document.getElementById("productGrid").appendChild(noResultsMsg);
+          }
+        } else if (noResultsMsg) {
+          noResultsMsg.remove();
+        }
+      }
+
+      // Modal Controls
+      function openCheckoutModal() {
+        document.getElementById("checkoutModal").classList.add("active");
+      }
+
+      function closeCheckoutModal() {
+        document.getElementById("checkoutModal").classList.remove("active");
+      }
+
+      function finishOrder() {
+        cart = [];
+        renderCart();
+        document.getElementById("successModal").classList.remove("active");
+      }
+
+      // Smooth Exit Transition
+      document.querySelectorAll('a[href="index.html"]').forEach((link) => {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          document.body.classList.add("page-exit");
+          setTimeout(() => {
+            window.location.href = link.href;
+          }, 200);
+        });
+      });
+    </script>
+  </body>
+</html>
