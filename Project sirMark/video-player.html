@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Watch Video - Pet Care</title>
+    <style>
+      /* Smooth Page Entrance & Exit Animations */
+      body {
+        animation: pageEntrance 0.4s ease-out forwards;
+        opacity: 1;
+        transition: opacity 0.25s ease, transform 0.25s ease;
+      }
+      body.page-exit {
+        opacity: 0;
+        transform: translateY(-8px);
+      }
+      @keyframes pageEntrance {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Video Wrapper Card */
+      .video__container {
+        max-width: 900px;
+        margin: 2rem auto 0;
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 10px 30px rgba(112, 82, 255, 0.12);
+        border: 1px solid #e7e0fd;
+      }
+
+      .video__wrapper {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+        height: 0;
+        overflow: hidden;
+        border-radius: 12px;
+        background-color: #000;
+      }
+
+      .video__wrapper iframe,
+      .video__wrapper video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+
+      .video__details {
+        margin-top: 1.5rem;
+      }
+
+      .video__details h3 {
+        font-size: 1.5rem;
+        color: #2c2c2c;
+        margin-bottom: 0.5rem;
+      }
+
+      .video__details p {
+        color: #666;
+        line-height: 1.6;
+        font-size: 0.95rem;
+      }
+
+      /* Navigation & Back Button */
+      .nav__links a {
+        transition: all 0.2s ease;
+        display: inline-block;
+      }
+      .nav__links a:hover {
+        transform: translateY(-2px);
+        color: #7052ff;
+      }
+      .nav__links a:active,
+      .back__btn:active {
+        transform: scale(0.94) !important;
+      }
+
+      .back__btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 2rem;
+        padding: 0.75rem 1.5rem;
+        background-color: #7052ff;
+        color: #ffffff !important;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(112, 82, 255, 0.2);
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .back__btn i {
+        transition: transform 0.25s ease;
+      }
+      .back__btn:hover {
+        background-color: #593cd8;
+        transform: translateX(-5px);
+        box-shadow: 0 6px 18px rgba(112, 82, 255, 0.35);
+      }
+      .back__btn:hover i {
+        transform: translateX(-4px);
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="nav__header">
+        <div class="nav__logo">
+          <a href="index.html">PET CARE</a>
+        </div>
+      </div>
+      <ul class="nav__links">
+        <li><a href="index.html">Home</a></li>
+      </ul>
+    </nav>
+
+    <section class="section__container">
+      <p class="section__subheader">Video Tour</p>
+      <h2 class="section__header">Welcome to Pet Doctor Clinic</h2>
+
+      <div class="video__container">
+        <div class="video__wrapper">
+          <!-- Option A: Embedded YouTube Video (Replace VIDEO_ID with your YouTube video code) -->
+          <iframe
+            src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+            title="Pet Doctor Overview"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+
+          <!-- Option B: Local MP4 Video File (Uncomment line below to use local video) -->
+          <!-- <video src="assets/intro-video.mp4" controls autoplay></video> -->
+        </div>
+
+        <div class="video__details">
+          <h3>Inside Our Veterinary Clinic</h3>
+          <p>
+            Take a short tour of our modern state-of-the-art facility, meet our loving staff, and learn how we provide low-stress, high-quality medical care for dogs, cats, and exotic pets.
+          </p>
+        </div>
+      </div>
+
+      <a href="index.html" class="back__btn">
+        <i class="ri-arrow-left-line"></i> Back to Home
+      </a>
+    </section>
+
+    <script>
+      // Smooth Page Exit Animation
+      document.querySelectorAll('a[href="index.html"]').forEach((link) => {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          document.body.classList.add("page-exit");
+          setTimeout(() => {
+            window.location.href = link.href;
+          }, 200);
+        });
+      });
+    </script>
+  </body>
+</html>
